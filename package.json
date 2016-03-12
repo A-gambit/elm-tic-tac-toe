@@ -5,7 +5,8 @@
   "main": "./src/Game.elm",
   "scripts": {
     "start": "./node_modules/.bin/gulp",
-    "build": "./node_modules/.bin/gulp elm-build"
+    "build": "./node_modules/.bin/gulp elm-build",
+    "minify": "./node_modules/.bin/gulp elm-minify"
   },
   "repository": {
     "type": "git",

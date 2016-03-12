@@ -22,6 +22,10 @@ $ npm install
     ```
     $ npm run build
     ```
+ * minify version
+     ```
+     $ npm run minify
+     ```   
 * develop
 ``` bash
 $ npm run start
