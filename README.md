@@ -5,12 +5,19 @@ Simple tic-tac-toe game which developed on [Elm](http://elm-lang.org/)
 
 ``` bash
 $ elm packages install
+$ npm install
 ```
 
 ## Build:
 
+* build using `elm make`
 ``` bash
 $ ./bin/build
+```
+
+* build minify js bundle
+``` bash
+$ npm run build
 ```
 
 ## See:

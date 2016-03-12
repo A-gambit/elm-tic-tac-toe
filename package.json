@@ -1,0 +1,23 @@
+{
+  "name": "elm-tic-tac-toe-git",
+  "version": "1.0.0",
+  "description": "Simple tic-tac-toe game which developed on [Elm](http://elm-lang.org/)",
+  "main": "./src/Game.elm",
+  "scripts": {
+    "build": "./node_modules/.bin/gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-gambit/elm-tic-tac-toe.git"
+  },
+  "author": "A-Gambit",
+  "bugs": {
+    "url": "https://github.com/A-gambit/elm-tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/A-gambit/elm-tic-tac-toe#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-elm": "^0.4.0",
+    "gulp-uglify": "^1.5.3"
+  }
+}
