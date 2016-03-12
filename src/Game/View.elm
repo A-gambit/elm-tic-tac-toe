@@ -35,7 +35,7 @@ winnerEl address winner draw =
       else if draw then
         "Draw"
       else
-        " "
+        ""
   in
     div
       [ Style.sub ]
@@ -64,8 +64,8 @@ itemEl address i j val =
       case val of
         1    -> span [ Style.cross ] [ text "X" ]
         (-1) -> span [ Style.circle ] [ text "O" ]
-        _    -> span [ ] [ text " " ]
+        _    -> span [ ] [ text "" ]
     action =
       if val == 0 then Move i j else NoOp
   in
-    span [ onClick address action, Style.itemWrapper ] [ toSymbol val ]
+    span [ onClick address action, Style.itemWrapper val ] [ toSymbol val ]

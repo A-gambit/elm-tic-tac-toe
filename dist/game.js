@@ -10143,22 +10143,27 @@ Elm.Game.Update.make = function (_elm) {
       A2($List.indexedMap,getItem,table)) || A2($List.all,checkItem,A2($List.indexedMap,getReverseItem,table))));
    });
    var checkDraw = function (table) {    return A2($List.all,function (row) {    return A2($List.all,function (x) {    return !_U.eq(x,0);},row);},table);};
+   var setMove = F3(function (model,i,j) {
+      var updateItem = F3(function (x,y,val) {    return _U.eq(x,i) && _U.eq(y,j) ? model.cur : val;});
+      var updateRow = F2(function (x,row) {    return A2($List.indexedMap,updateItem(x),row);});
+      var table = A2($List.indexedMap,updateRow,model.table);
+      return _U.update(model,
+      {table: table
+      ,cur: A2(F2(function (x,y) {    return x * y;}),model.cur,-1)
+      ,winner: A2(checkWin,model.cur,table) ? model.cur : model.winner
+      ,draw: checkDraw(table)});
+   });
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
       {case "NoOp": return model;
-         case "Move": var updateItem = F3(function (x,y,val) {    return _U.eq(x,_p0._0) && _U.eq(y,_p0._1) ? model.cur : val;});
-           var updateRow = F2(function (x,row) {    return A2($List.indexedMap,updateItem(x),row);});
-           var table = A2($List.indexedMap,updateRow,model.table);
-           var winner = A2(checkWin,model.cur,table) ? model.cur : model.winner;
-           return _U.cmp(model.winner,0) > 0 || model.draw ? model : _U.update(model,
-           {table: table,cur: A2(F2(function (x,y) {    return x * y;}),model.cur,-1),winner: winner,draw: checkDraw(table)});
+         case "Move": return _U.cmp(model.winner,0) > 0 || model.draw ? model : A3(setMove,model,_p0._0,_p0._1);
          default: return $Game$Model.initialModel;}
    });
    var Restart = {ctor: "Restart"};
    var Move = F2(function (a,b) {    return {ctor: "Move",_0: a,_1: b};});
    var NoOp = {ctor: "NoOp"};
-   return _elm.Game.Update.values = {_op: _op,NoOp: NoOp,Move: Move,Restart: Restart,checkDraw: checkDraw,checkWin: checkWin,update: update};
+   return _elm.Game.Update.values = {_op: _op,NoOp: NoOp,Move: Move,Restart: Restart,checkDraw: checkDraw,checkWin: checkWin,setMove: setMove,update: update};
 };
 Elm.Html = Elm.Html || {};
 Elm.Html.Attributes = Elm.Html.Attributes || {};
@@ -10408,13 +10413,21 @@ Elm.Game.Style.make = function (_elm) {
                            ,{ctor: "_Tuple2",_0: "font-size",_1: "30px"}]);
    var cross = $Html$Attributes.style(A2($List._op["::"],{ctor: "_Tuple2",_0: "color",_1: "#5D45D2"},itemStyle));
    var circle = $Html$Attributes.style(A2($List._op["::"],{ctor: "_Tuple2",_0: "color",_1: "#F54444"},itemStyle));
-   var itemWrapper = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "60px"}
-                                                    ,{ctor: "_Tuple2",_0: "height",_1: "60px"}
-                                                    ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                    ,{ctor: "_Tuple2",_0: "margin",_1: "3px"}
-                                                    ,{ctor: "_Tuple2",_0: "background",_1: "#dedede"}
-                                                    ,{ctor: "_Tuple2",_0: "border-radius",_1: "4px"}
-                                                    ,{ctor: "_Tuple2",_0: "vertical-align",_1: "top"}]));
+   var itemWrapper = function (val) {
+      var cursorStyle = function (list) {
+         return _U.eq(val,0) ? A2($List._op["::"],{ctor: "_Tuple2",_0: "cursor",_1: "pointer"},list) : A2($List._op["::"],
+         {ctor: "_Tuple2",_0: "cursor",_1: "default"},
+         list);
+      };
+      var styleList = _U.list([{ctor: "_Tuple2",_0: "width",_1: "60px"}
+                              ,{ctor: "_Tuple2",_0: "height",_1: "60px"}
+                              ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                              ,{ctor: "_Tuple2",_0: "margin",_1: "3px"}
+                              ,{ctor: "_Tuple2",_0: "background",_1: "#dedede"}
+                              ,{ctor: "_Tuple2",_0: "border-radius",_1: "4px"}
+                              ,{ctor: "_Tuple2",_0: "vertical-align",_1: "top"}]);
+      return $Html$Attributes.style(cursorStyle(styleList));
+   };
    var table = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "display",_1: "block"}
                                               ,{ctor: "_Tuple2",_0: "width",_1: "198px"}
                                               ,{ctor: "_Tuple2",_0: "margin",_1: "20px auto"}]));
@@ -10475,9 +10488,9 @@ Elm.Game.View.make = function (_elm) {
          switch (_p0)
          {case 1: return A2($Html.span,_U.list([$Game$Style.cross]),_U.list([$Html.text("X")]));
             case -1: return A2($Html.span,_U.list([$Game$Style.circle]),_U.list([$Html.text("O")]));
-            default: return A2($Html.span,_U.list([]),_U.list([$Html.text(" ")]));}
+            default: return A2($Html.span,_U.list([]),_U.list([$Html.text("")]));}
       };
-      return A2($Html.span,_U.list([A2($Html$Events.onClick,address,action),$Game$Style.itemWrapper]),_U.list([toSymbol(val)]));
+      return A2($Html.span,_U.list([A2($Html$Events.onClick,address,action),$Game$Style.itemWrapper(val)]),_U.list([toSymbol(val)]));
    });
    var rowEl = F3(function (address,i,row) {    var rows = A2($List.indexedMap,A2(itemEl,address,i),row);return A2($Html.div,_U.list([]),rows);});
    var tableEl = F2(function (address,table) {
@@ -10486,7 +10499,7 @@ Elm.Game.View.make = function (_elm) {
    });
    var winnerEl = F3(function (address,winner,draw) {
       var getWinner = function (val) {    return A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),_U.eq(val,1) ? "first" : "second"," player");};
-      var result = !_U.eq(winner,0) ? A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"Win ",getWinner(winner)) : draw ? "Draw" : " ";
+      var result = !_U.eq(winner,0) ? A2(F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"Win ",getWinner(winner)) : draw ? "Draw" : "";
       return A2($Html.div,
       _U.list([$Game$Style.sub]),
       _U.list([A2($Html.span,_U.list([$Game$Style.win]),_U.list([$Html.text(result)]))

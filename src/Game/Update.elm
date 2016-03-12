@@ -31,6 +31,23 @@ checkWin cur table =
     || List.all checkItem (List.indexedMap getReverseItem table)
 
 
+setMove : Model -> Int -> Int -> Model
+setMove model i j =
+  let
+    updateItem x y val =
+        if x == i && y == j then model.cur else val
+    updateRow x row =
+      List.indexedMap (updateItem x) row
+    table = List.indexedMap updateRow model.table
+  in
+    { model
+      | table = table
+      , cur = (*) model.cur -1
+      , winner = if checkWin model.cur table then model.cur else model.winner
+      , draw = checkDraw table
+    }
+
+
 update : Action -> Model -> Model
 update action model =
   case action of
@@ -38,24 +55,10 @@ update action model =
       model
 
     Move i j ->
-      let
-        updateItem x y val =
-            if x == i && y == j then model.cur else val
-        updateRow x row =
-          List.indexedMap (updateItem x) row
-        table = List.indexedMap updateRow model.table
-        winner =
-          if checkWin model.cur table then model.cur else model.winner
-      in
-        if model.winner > 0 || model.draw then
-          model
-        else
-          { model
-            | table = table
-            , cur = (*) model.cur -1
-            , winner = winner
-            , draw = checkDraw table
-          }
+      if model.winner > 0 || model.draw then
+        model
+      else
+        setMove model i j
 
     Restart ->
       initialModel

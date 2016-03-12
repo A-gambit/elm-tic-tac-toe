@@ -54,17 +54,26 @@ table =
     , ("margin", "20px auto")
     ]
 
-itemWrapper : Attribute
-itemWrapper =
-  style
-    [ ("width", "60px")
-    , ("height", "60px")
-    , ("display", "inline-block")
-    , ("margin", "3px")
-    , ("background", "#dedede")
-    , ("border-radius", "4px")
-    , ("vertical-align", "top")
-    ]
+itemWrapper : Int -> Attribute
+itemWrapper val =
+  let
+    styleList =
+      [ ("width", "60px")
+      , ("height", "60px")
+      , ("display", "inline-block")
+      , ("margin", "3px")
+      , ("background", "#dedede")
+      , ("border-radius", "4px")
+      , ("vertical-align", "top")
+      ]
+    cursorStyle list =
+      if val == 0 then
+        ("cursor", "pointer") :: list
+      else
+        ("cursor", "default") :: list
+  in
+    style <| cursorStyle <| styleList
+
 
 itemStyle : List (String, String)
 itemStyle =
