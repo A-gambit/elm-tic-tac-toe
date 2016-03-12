@@ -4,24 +4,24 @@ Simple tic-tac-toe game which developed on [Elm](http://elm-lang.org/)
 ## Install: 
 
 ``` bash
-$ elm packages install
+$ npm install -g elm
+$ elm package install
 $ npm install
 ```
 
 ## Build:
 
-* build using `elm make`
+* build using 
 ``` bash
-$ ./bin/build
+$ elm make
 ```
+See: `$ ./bin/build.sh`
+
 
 * build minify js bundle
 ``` bash
 $ npm run build
 ```
+See: `$ ./bin/open.sh`
 
-## See:
-
-``` bash
-$ ./bin/open
-```
+Open in your browser `~/index.html` and play.
