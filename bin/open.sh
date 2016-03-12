@@ -1,2 +1,2 @@
-#!/usr/bin/env bash
-open -a Google\ Chrome index.html
+#!/usr/bin/env bsash
+open index.html

@@ -4,7 +4,8 @@
   "description": "Simple tic-tac-toe game which developed on [Elm](http://elm-lang.org/)",
   "main": "./src/Game.elm",
   "scripts": {
-    "build": "./node_modules/.bin/gulp"
+    "start": "./node_modules/.bin/gulp",
+    "build": "./node_modules/.bin/gulp elm-build"
   },
   "repository": {
     "type": "git",

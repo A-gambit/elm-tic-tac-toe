@@ -18,6 +18,8 @@ checkWin cur table =
   let
     checkItem val =
       val == Just cur
+    checkRow row =
+       List.sum row == (*) cur (List.length row)
     getItem index row =
       List.head <| List.drop index <| List.take (index + 1) <| row
     getReverseItem index row =
@@ -25,7 +27,7 @@ checkWin cur table =
     checkItemInRow index row =
       row |> getItem index |> checkItem
   in
-    List.any (\row -> List.sum row == (*) cur (List.length row)) table
+    List.any checkRow table
     || List.any (\index -> List.all (checkItemInRow index) table) [0..(List.length table)]
     || List.all checkItem (List.indexedMap getItem table)
     || List.all checkItem (List.indexedMap getReverseItem table)

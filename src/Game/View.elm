@@ -27,11 +27,11 @@ title =
 winnerEl : Address Action -> Int -> Bool -> Html
 winnerEl address winner draw =
   let
-    getWinner val =
-      (++) (if val == 1 then "first" else "second") " player"
+    showWinner val =
+      (++) (if val == 1 then "First" else "Second") " player win"
     result =
       if winner /= 0 then
-        winner |> getWinner |> (++) "Win "
+        showWinner winner
       else if draw then
         "Draw"
       else
