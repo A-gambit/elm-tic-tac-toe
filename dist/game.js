@@ -10414,19 +10414,18 @@ Elm.Game.Style.make = function (_elm) {
    var cross = $Html$Attributes.style(A2($List._op["::"],{ctor: "_Tuple2",_0: "color",_1: "#5D45D2"},itemStyle));
    var circle = $Html$Attributes.style(A2($List._op["::"],{ctor: "_Tuple2",_0: "color",_1: "#F54444"},itemStyle));
    var itemWrapper = function (val) {
-      var cursorStyle = function (list) {
-         return _U.eq(val,0) ? A2($List._op["::"],{ctor: "_Tuple2",_0: "cursor",_1: "pointer"},list) : A2($List._op["::"],
+      var cursorStyle = function (styleList) {
+         return _U.eq(val,0) ? A2($List._op["::"],{ctor: "_Tuple2",_0: "cursor",_1: "pointer"},styleList) : A2($List._op["::"],
          {ctor: "_Tuple2",_0: "cursor",_1: "default"},
-         list);
+         styleList);
       };
-      var styleList = _U.list([{ctor: "_Tuple2",_0: "width",_1: "60px"}
-                              ,{ctor: "_Tuple2",_0: "height",_1: "60px"}
-                              ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                              ,{ctor: "_Tuple2",_0: "margin",_1: "3px"}
-                              ,{ctor: "_Tuple2",_0: "background",_1: "#dedede"}
-                              ,{ctor: "_Tuple2",_0: "border-radius",_1: "4px"}
-                              ,{ctor: "_Tuple2",_0: "vertical-align",_1: "top"}]);
-      return $Html$Attributes.style(cursorStyle(styleList));
+      return $Html$Attributes.style(cursorStyle(_U.list([{ctor: "_Tuple2",_0: "width",_1: "60px"}
+                                                        ,{ctor: "_Tuple2",_0: "height",_1: "60px"}
+                                                        ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                                                        ,{ctor: "_Tuple2",_0: "margin",_1: "3px"}
+                                                        ,{ctor: "_Tuple2",_0: "background",_1: "#dedede"}
+                                                        ,{ctor: "_Tuple2",_0: "border-radius",_1: "4px"}
+                                                        ,{ctor: "_Tuple2",_0: "vertical-align",_1: "top"}])));
    };
    var table = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "display",_1: "block"}
                                               ,{ctor: "_Tuple2",_0: "width",_1: "198px"}

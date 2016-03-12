@@ -57,7 +57,13 @@ table =
 itemWrapper : Int -> Attribute
 itemWrapper val =
   let
-    styleList =
+    cursorStyle styleList =
+      if val == 0 then
+        ("cursor", "pointer") :: styleList
+      else
+        ("cursor", "default") :: styleList
+  in
+    style <| cursorStyle <|
       [ ("width", "60px")
       , ("height", "60px")
       , ("display", "inline-block")
@@ -66,13 +72,6 @@ itemWrapper val =
       , ("border-radius", "4px")
       , ("vertical-align", "top")
       ]
-    cursorStyle list =
-      if val == 0 then
-        ("cursor", "pointer") :: list
-      else
-        ("cursor", "default") :: list
-  in
-    style <| cursorStyle <| styleList
 
 
 itemStyle : List (String, String)
