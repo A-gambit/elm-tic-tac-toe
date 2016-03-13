@@ -1,7 +1,5 @@
 module Game.Model where
 
-import Maybe exposing (..)
-
 type Player
   = First
   | Second
