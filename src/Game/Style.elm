@@ -97,15 +97,17 @@ table size =
     ]
 
 itemWrapper : Mark -> Attribute
-itemWrapper val =
+itemWrapper mark =
   let
     cursorStyle styleList =
-      if val == NoN then
+      if mark == NoN then
         ("cursor", "pointer") :: styleList
       else
         ("cursor", "default") :: styleList
   in
-    style <| cursorStyle <|
+    style
+      <| cursorStyle
+      <|
       [ ("width", (++) (toString itemSize) "px")
       , ("height", (++) (toString itemSize) "px")
       , ("display", "inline-block")

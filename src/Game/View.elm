@@ -74,14 +74,14 @@ rowEl address i row =
     div [ ] rows
 
 itemEl : Address Action -> Int -> Int -> Mark -> Html
-itemEl address i j val =
+itemEl address i j mark =
   let
     symbol =
-      case val of
+      case mark of
         X -> span [ Style.cross ] [ text "X" ]
         O -> span [ Style.circle ] [ text "O" ]
         _ -> span [ ] [ text "" ]
     action =
-      if val == NoN then Move i j else NoOp
+      if mark == NoN then Move i j else NoOp
   in
-    span [ onClick address action, Style.itemWrapper val ] [ symbol ]
+    span [ onClick address action, Style.itemWrapper mark ] [ symbol ]
