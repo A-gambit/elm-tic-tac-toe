@@ -1,12 +1,15 @@
 module Game.Update where
 
+import String exposing (toInt)
+import Result exposing (toMaybe)
+import Maybe exposing (withDefault)
 import Game.Model exposing (initialModel, Model)
-
 
 type Action
   = NoOp
-  | Move Int Int
   | Restart
+  | Move Int Int
+  | UpdateSize String
 
 
 checkDraw : List (List Int) -> Bool
@@ -50,11 +53,31 @@ setMove model i j =
     }
 
 
+createTable : Int -> List (List Int)
+createTable size =
+  List.repeat size <| List.repeat size 0
+
 update : Action -> Model -> Model
 update action model =
   case action of
     NoOp ->
       model
+
+    UpdateSize size ->
+      let
+        checkSize val =
+          if val < 3 then
+            3
+          else if val > 100 then
+           100
+          else
+            val
+        newSize = toInt size |> toMaybe |> withDefault 0 |> checkSize
+      in
+        { initialModel
+          | size = newSize
+          , table = createTable newSize
+        }
 
     Move i j ->
       if model.winner > 0 || model.draw then
@@ -63,4 +86,7 @@ update action model =
         setMove model i j
 
     Restart ->
-      initialModel
+      { initialModel
+        | size = model.size
+        , table = createTable model.size
+      }

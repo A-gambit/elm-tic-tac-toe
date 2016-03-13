@@ -1,28 +1,46 @@
 module Game.View where
 
-import Html exposing (Html, div, span, text)
+import Html exposing (Html, div, span, text, input)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (type', placeholder, value, name, min, max)
 import Signal exposing (Address)
-
-import Color exposing (..)
-import Graphics.Element exposing (..)
 
 import Game.Model exposing (Model)
 import Game.Update exposing (Action (..))
+import Game.Utils as Utils
 import Game.Style as Style
 
 view : Address Action -> Model -> Html
 view address model =
   div
-    [ Style.content ]
-    [ title
+    [ Style.content <| List.length model.table ]
+    [ titleEl
+    , sizeEl address model.size
     , winnerEl address model.winner model.draw
     , tableEl address model.table
     ]
 
-title : Html
-title =
+titleEl : Html
+titleEl =
   div [ Style.title ] [ span [] [ text "Tic-Tac-Toe!" ] ]
+
+
+sizeEl : Address Action ->  Int -> Html
+sizeEl address size =
+  div
+  [ Style.sizeWrapper ]
+  [ span [ Style.sizeLabel ] [ text "Size" ]
+  , input
+    [ type' "number"
+    , placeholder "Size"
+    , value <| toString size
+    , Html.Attributes.min "3"
+    , Html.Attributes.max "100"
+    , Utils.onInput address UpdateSize
+    , Style.sizeInput
+    ]
+    []
+  ]
 
 winnerEl : Address Action -> Int -> Bool -> Html
 winnerEl address winner draw =
@@ -48,7 +66,7 @@ tableEl address table =
   let
     content = List.indexedMap (rowEl address) table
   in
-    div [ Style.table ] content
+    div [ Style.table <| List.length table ] content
 
 rowEl : Address Action -> Int -> List Int -> Html
 rowEl address i row =

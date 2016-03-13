@@ -5,11 +5,21 @@ import Html.Attributes exposing (style)
 
 import Game.Model exposing (initialModel)
 
-content : Attribute
-content =
+itemSize : Int
+itemSize = 60
+
+marginSize : Int
+marginSize = 3
+
+blockWith : Int -> Int
+blockWith size =
+  size * 66
+
+content : Int -> Attribute
+content size =
   style
     [ ("backgroundColor", "#fff")
-    , ("height", "500px")
+    , ("height", (++) (toString <| (+) 200 <| blockWith size) "px")
     , ("overflow", "hidden")
     , ("width", "100%")
     ]
@@ -27,6 +37,38 @@ title =
 sub : Attribute
 sub =
   style [ ("text-align", "center") ]
+
+
+sizeWrapper : Attribute
+sizeWrapper =
+  style
+    [ ("display", "block")
+    , ("margin", "0 auto 10px auto")
+    , ("width", "105px")
+    ]
+
+sizeLabel : Attribute
+sizeLabel =
+  style
+    [ ("display", "inline-block")
+    , ("color", "#5a5b5f")
+    , ("font-size", "18px")
+    , ("cursor", "pointer")
+    ]
+
+sizeInput : Attribute
+sizeInput =
+  style
+    [ ("display", "inline-block")
+    , ("background", "#dedede")
+    , ("font-size", "18px")
+    , ("padding", "4px")
+    , ("border", "none")
+    , ("margin-left", "10px")
+    , ("outline", "none")
+    , ("width", "50px")
+    ]
+
 
 restart : Attribute
 restart =
@@ -46,11 +88,11 @@ win =
     , ("margin-right", "15px")
     ]
 
-table : Attribute
-table =
+table : Int -> Attribute
+table size =
   style
     [ ("display", "block")
-    , ("width", "198px" )
+    , ("width", (++) (toString <| blockWith size ) "px" )
     , ("margin", "20px auto")
     ]
 
@@ -64,15 +106,14 @@ itemWrapper val =
         ("cursor", "default") :: styleList
   in
     style <| cursorStyle <|
-      [ ("width", "60px")
-      , ("height", "60px")
+      [ ("width", (++) (toString itemSize) "px")
+      , ("height", (++) (toString itemSize) "px")
       , ("display", "inline-block")
-      , ("margin", "3px")
+      , ("margin", (++) (toString marginSize) "px")
       , ("background", "#dedede")
       , ("border-radius", "4px")
       , ("vertical-align", "top")
       ]
-
 
 itemStyle : List (String, String)
 itemStyle =
