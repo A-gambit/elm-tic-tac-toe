@@ -3,7 +3,7 @@ module Game.Style where
 import Html exposing (Attribute)
 import Html.Attributes exposing (style)
 
-import Game.Model exposing (initialModel)
+import Game.Model exposing (initialModel, Mark (..))
 
 itemSize : Int
 itemSize = 60
@@ -96,11 +96,11 @@ table size =
     , ("margin", "20px auto")
     ]
 
-itemWrapper : Int -> Attribute
+itemWrapper : Mark -> Attribute
 itemWrapper val =
   let
     cursorStyle styleList =
-      if val == 0 then
+      if val == NoN then
         ("cursor", "pointer") :: styleList
       else
         ("cursor", "default") :: styleList

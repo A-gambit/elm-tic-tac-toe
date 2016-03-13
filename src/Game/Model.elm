@@ -1,22 +1,37 @@
 module Game.Model where
 
+import Maybe exposing (..)
+
+type Player
+  = First
+  | Second
+
+type Mark
+  = X
+  | O
+  | NoN
+
+type GameStatus
+  = InProgress
+  | Draw
+  | FirstWinner
+  | SecondWinner
+
 type alias Model =
-  { table : List (List Int)
-  , cur : Int
+  { table : List (List Mark)
+  , player : Player
   , size : Int
-  , winner : Int
-  , draw : Bool
+  , status: GameStatus
   }
 
 initialModel : Model
 initialModel =
   { table =
-    [ [ 0, 0, 0 ]
-    , [ 0, 0, 0 ]
-    , [ 0, 0, 0 ]
+    [ [ NoN, NoN, NoN ]
+    , [ NoN, NoN, NoN ]
+    , [ NoN, NoN, NoN ]
     ]
-    , cur = 1
+    , player = First
     , size = 3
-    , winner = 0
-    , draw = False
+    , status = InProgress
   }

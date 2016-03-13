@@ -1,9 +1,7 @@
 module Game.Update where
 
 import String exposing (toInt)
-import Result exposing (toMaybe)
-import Maybe exposing (withDefault)
-import Game.Model exposing (initialModel, Model)
+import Game.Model exposing (initialModel, Model, Player (..), Mark (..), GameStatus (..))
 
 type Action
   = NoOp
@@ -11,51 +9,67 @@ type Action
   | Move Int Int
   | UpdateSize String
 
-
-checkDraw : List (List Int) -> Bool
+checkDraw : List (List Mark) -> Bool
 checkDraw table =
-  List.all (\row -> List.all (\x -> x /= 0) row) table
+  List.all (List.all ((/=) NoN)) table
 
-checkWin : Int -> List (List Int) -> Bool
-checkWin cur table =
+checkWin : Mark -> List (List Mark) -> Bool
+checkWin playerMark table =
   let
-    checkItem val =
-      val == Just cur
-    checkRow row =
-       List.sum row == (*) cur (List.length row)
+    checkItem mark =
+      mark == playerMark
     getItem index row =
-      List.head <| List.drop index <| List.take (index + 1) <| row
+      Maybe.withDefault NoN
+        <| List.head
+        <| List.drop index
+        <| List.take (index + 1)
+        <| row
     getReverseItem index row =
-        getItem (List.length row - index - 1) row
+       getItem (List.length row - index - 1) row
     checkItemInRow index row =
-      row |> getItem index |> checkItem
+      row
+        |> getItem index
+        |> checkItem
+    checkVertical index =
+      List.all (checkItemInRow index) table
   in
-    List.any checkRow table
-    || List.any (\index -> List.all (checkItemInRow index) table) [0..(List.length table)]
+    List.any (List.all checkItem) table
+    || List.any checkVertical [0..(List.length table)]
     || List.all checkItem (List.indexedMap getItem table)
     || List.all checkItem (List.indexedMap getReverseItem table)
-
 
 setMove : Model -> Int -> Int -> Model
 setMove model i j =
   let
-    updateItem x y val =
-        if x == i && y == j then model.cur else val
+    playerMark =
+      if model.player == First then X else O
+    updateItem x y cur =
+      if x == i && y == j then playerMark else cur
     updateRow x row =
       List.indexedMap (updateItem x) row
     table = List.indexedMap updateRow model.table
+    isWin = checkWin playerMark table
+    player =
+      if model.player == First then Second else First
+    status =
+      if isWin && model.player == First then
+        FirstWinner
+      else if isWin && model.player == Second then
+        SecondWinner
+      else if checkDraw table then
+        Draw
+      else
+        InProgress
   in
     { model
       | table = table
-      , cur = (*) model.cur -1
-      , winner = if checkWin model.cur table then model.cur else model.winner
-      , draw = checkDraw table
+      , player = player
+      , status = status
     }
 
-
-createTable : Int -> List (List Int)
+createTable : Int -> List (List Mark)
 createTable size =
-  List.repeat size <| List.repeat size 0
+  List.repeat size <| List.repeat size NoN
 
 update : Action -> Model -> Model
 update action model =
@@ -65,14 +79,10 @@ update action model =
 
     UpdateSize size ->
       let
-        checkSize val =
-          if val < 3 then
-            3
-          else if val > 100 then
-           100
-          else
-            val
-        newSize = toInt size |> toMaybe |> withDefault 0 |> checkSize
+        newSize =
+          toInt size
+            |> Result.toMaybe
+            |> Maybe.withDefault 0
       in
         { initialModel
           | size = newSize
@@ -80,7 +90,7 @@ update action model =
         }
 
     Move i j ->
-      if model.winner > 0 || model.draw then
+      if model.status /= InProgress then
         model
       else
         setMove model i j
